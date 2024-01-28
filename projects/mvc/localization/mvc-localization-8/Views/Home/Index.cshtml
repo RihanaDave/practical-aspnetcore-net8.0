@@ -1,0 +1,64 @@
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Localization
+@inject IStringLocalizer<Global> local
+
+@{
+    var culture = Context.Features.Get<IRequestCultureFeature>();
+}
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <div class="col-md-12">
+                <h1>Using `Accept-Language` header in your API call</h1>
+                <p>In this example, we only use AcceptLanguageHeaderRequestCultureProvider to demonstrate on how you can affect culture information in your WebAPI request.</p>
+                <p>Each of the following AJAX call send 'Accept-Language' header with 'en-US' and 'fr-FR' for their respective languages.</p>
+                <div id="message" style="color:red;font-weight:bold;"></div>
+
+                <br/><br/>
+                <button type="button" id="english">Show English</button>
+                <button type="button" id="french">Show French</button>
+            </div>
+        </div>
+     
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script>
+            $(function(){
+                $('#english').click(function(){
+                    let url = `/api`;
+                    $.ajax({
+                        typ: `GET`,
+                        url: url,
+                        dataType: `json`,
+                        headers: {
+                            'Accept': `application/json`, 
+                            'Accept-Language': `en-US`
+                        }
+                    }).done(function(data)
+                    {
+                        $('#message').text(data.greeting);
+                    });
+                });
+
+                $('#french').click(function(){
+                    let url = `/api`;
+                    $.ajax({
+                        typ: `GET`,
+                        url: url,
+                        dataType: `json`,
+                        headers: {
+                            'Accept': `application/json`, 
+                            'Accept-Language': `fr-FR`
+                        }
+                    }).done(function(data)
+                    {
+                        $('#message').text(data.greeting);
+                    });
+
+                });
+            });
+        </script>
+    </body>
+</html>

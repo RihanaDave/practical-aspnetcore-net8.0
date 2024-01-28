@@ -1,0 +1,38 @@
+@page
+@using OrchardCore.Environment.Shell
+@inject ShellSettings Settings
+
+<div class="container">
+    <h1>Shell Settings</h1>
+
+    <ul>
+        <li><a href="/">/</a></li>
+        <li><a href="/customer-a">customer-a</a></li>
+        <li><a href="/customer-b">customer-b</a></li>
+    </ul>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Name</td>
+                <td>@Settings.Name</td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td>@Settings.State</td>
+            </tr>
+            <tr>
+                <td>Prefix</td>
+                <td>@Settings.RequestUrlPrefix</td>
+            </tr>
+            <tr>
+                <td>Custom Setting</td>
+                <td>@Settings["CustomSetting"]</td>
+            </tr>
+            <tr>
+                <td>Customer Level</td>
+                <td>@Settings["CustomerLevel"]</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

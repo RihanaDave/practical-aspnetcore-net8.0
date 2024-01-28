@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>routing</AssemblyName>
+
+    <PackageId>hello-world</PackageId>
+      <ImplicitUsings>true</ImplicitUsings>
+  </PropertyGroup>
+
+
+</Project>

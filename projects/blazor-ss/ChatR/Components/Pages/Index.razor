@@ -1,0 +1,84 @@
+﻿@page "/"
+@inject NotificationService Notification
+@implements IDisposable
+
+<div class="container">
+    <h1>SignalR Broadcast</h1>
+    <ul>
+        <li>
+            <a href="/" target="new">Open another window</a>
+        </li>
+        <li>
+            Click Connect
+        </li>
+        <li>
+            Enter Name and Broadcast Message. Both screens will receive the broadcasts. 
+        </li>
+    </ul>
+
+    <div class="alert alert-warning">
+        @Log
+    </div>
+
+    <div class="alert alert-info">
+        @Message
+    </div>
+    <button @onclick="ConnectAsync" class="btn btn-primary">Connect</button>
+    
+    <br/><br/>
+    @if (ShowChatPanel)
+    {
+        <label>Username</label>
+        <input class="form-control" type="text" @bind="Sender" placeholder="Enter username" />
+        <br/>
+        <label>Broadcast Message</label>
+        <textarea class="form-control" @bind="BroadcastMessage" placeholder="Enter Broadcast Message"></textarea>
+        <br/>
+        <button @onclick="BroadcastAsync" class="btn btn-secondary">Broadcast</button>
+    }
+</div>
+
+@code{
+    string Message { get;set;}
+    
+    string Log { get;set;}
+
+    string Sender { get;set;}
+
+    string BroadcastMessage { get;set;}
+
+    bool ShowChatPanel { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Notification.OnBroadcastMessage = async (string user, string message) =>
+        {
+            Message = $"{user} broadcasts \"{message}\"";
+            await this.InvokeAsync(StateHasChanged);
+        }; 
+
+        Notification.OnServerMessage = async (string message) =>
+        {
+            ShowChatPanel = true;
+            Message = $"Server sends message: \"{message}\"";
+            await this.InvokeAsync(StateHasChanged);
+        }; 
+    }
+
+    async Task ConnectAsync()
+    {
+        Log = "Connected";
+        await Notification.ConnectAsync();
+    }
+
+    async Task BroadcastAsync()
+    {
+        Log = "Broadcast";
+        await Notification.BroadcastAsync(Sender, BroadcastMessage);
+    }
+
+    public void Dispose()
+    {
+        Notification.DisposeAsync(); //This is by design because Blazor does not support IAsyncDisposable  https://github.com/dotnet/aspnetcore/issues/20932
+    }
+}
